@@ -16,7 +16,9 @@
                     </div>
                 </div>
 
-                <div class="d-flex m-3"></div>
+                <div class="m-3">
+                    <add-task />
+                </div>
 
                 <div class="m-3">
                     <ul class="list-group">
@@ -26,8 +28,8 @@
                             <span>Tasks</span>
                             <span>Action</span>
                         </li>
-                        <Todo
-                            v-for="task in tasks"
+                        <Task
+                            v-for="task in filteredTasks"
                             :key="task.id"
                             :task="task"
                         />
@@ -40,30 +42,90 @@
 
 <script>
 import axios from "axios";
-import Todo from "./Todo";
+import Task from "../components/Task";
+import AddTask from "../components/AddTask";
 export default {
     components: {
-        Todo,
+        Task,
+        AddTask,
     },
     data() {
         return {
             search: "",
             tasks: "",
+            user: null,
         };
     },
     created() {
         this.getTasks();
+        this.$root.$on("updateTask", (task) => {
+            this.updateTask(task);
+        });
+        this.$root.$on("deleteTask", (id) => {
+            this.deleteTask(id);
+        });
+
+        this.$root.$on("addTask", (name) => {
+            this.addTask(name);
+        });
+        this.user = this.$store.state.user.user;
+    },
+    computed: {
+        filteredTasks() {
+            return Object.values(this.tasks).filter((task) => {
+                return task.name
+                    .toLowerCase()
+                    .includes(this.search.toLowerCase());
+            });
+        },
     },
     methods: {
         async getTasks() {
             await axios
                 .get("/api/tasks")
                 .then((res) => {
-                    console.log(res);
                     this.tasks = res.data;
                 })
                 .catch((err) => {
                     console.log(err);
+                });
+        },
+        async updateTask(task) {
+            await axios
+                .post(`/api/tasks/update/${task.id}`, task)
+                .then((res) => {
+                    console.log(res);
+                    this.$root.$emit("taskUpdated", task);
+                })
+                .catch((err) => {
+                    console.dir(err);
+                });
+        },
+        async deleteTask(id) {
+            console.log("deleteTask");
+            await axios
+                .delete(`/api/tasks/delete/${id}`)
+                .then((res) => {
+                    this.getTasks();
+                    this.$root.$emit("taskUpdated", task);
+                })
+                .catch((err) => {
+                    console.dir(err);
+                });
+        },
+        async addTask(name) {
+            let data = {
+                name: name,
+                author: this.user.name,
+                status: 0,
+            };
+            await axios
+                .post(`/api/tasks/add`, data)
+                .then((res) => {
+                    this.tasks.unshift(data);
+                })
+                .catch((err) => {
+                    console.dir(err);
                 });
         },
     },
