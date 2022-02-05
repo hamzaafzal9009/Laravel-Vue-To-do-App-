@@ -1,17 +1,31 @@
 require("./bootstrap");
-import "./bootstrap";
 import Vue from "vue";
-import BootstrapVue from "bootstrap-vue";
-import App from "./App.vue";
-import "bootstrap-vue/dist/bootstrap-vue.css";
+import Main from "./Main.vue";
+import router from "./router";
+import store from "./store";
 
-Vue.use(BootstrapVue);
+window.Vue = require("vue").default;
 
-window.onload = function () {
-    const app = new Vue({
-        el: "#app",
-        render: (h) => h(App),
-    });
-};
+const app = new Vue({
+    router,
+    store,
+    render: (h) => h(Main),
+    created() {
+        const userInfo = localStorage.getItem("user");
+        if (userInfo) {
+            const userData = JSON.parse(userInfo);
+            this.$store.commit("setUserData", userData);
+        }
+        axios.interceptors.response.use(
+            (response) => response,
+            (error) => {
+                if (error.response.status === 401) {
+                    this.$store.dispatch("logout");
+                }
+                return Promise.reject(error);
+            }
+        );
+    },
+}).$mount("#app");
 
 export default app;
