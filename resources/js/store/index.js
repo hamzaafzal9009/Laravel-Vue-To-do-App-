@@ -37,6 +37,18 @@ export default new Vuex.Store({
                     console.dir(error);
                 });
         },
+        register({ commit }, credentials) {
+            console.log(credentials);
+            return authClient
+                .post("/register", credentials)
+                .then(({ data }) => {
+                    console.log(data);
+                    // commit("setUserData", data);
+                })
+                .catch((error) => {
+                    console.dir(error);
+                });
+        },
 
         logout({ commit }) {
             commit("clearUserData");

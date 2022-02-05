@@ -87,7 +87,7 @@ export default {
                     this.tasks = res.data;
                 })
                 .catch((err) => {
-                    console.log(err);
+                    console.dir(err);
                 });
         },
         async updateTask(task) {
@@ -95,6 +95,7 @@ export default {
                 .post(`/api/tasks/update/${task.id}`, task)
                 .then((res) => {
                     console.log(res);
+                    this.$toast.success("Task Updated");
                     this.$root.$emit("taskUpdated", task);
                 })
                 .catch((err) => {
@@ -106,8 +107,11 @@ export default {
             await axios
                 .delete(`/api/tasks/delete/${id}`)
                 .then((res) => {
-                    this.getTasks();
-                    this.$root.$emit("taskUpdated", task);
+                    if (res.status == 200) {
+                        this.getTasks();
+                        this.$toast.success("Task Deleted");
+                        this.$root.$emit("taskUpdated", task);
+                    }
                 })
                 .catch((err) => {
                     console.dir(err);
@@ -122,7 +126,8 @@ export default {
             await axios
                 .post(`/api/tasks/add`, data)
                 .then((res) => {
-                    this.tasks.unshift(data);
+                    this.$toast.success("Task Added");
+                    this.getTasks();
                 })
                 .catch((err) => {
                     console.dir(err);

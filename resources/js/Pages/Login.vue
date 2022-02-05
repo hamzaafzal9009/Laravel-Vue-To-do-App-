@@ -66,6 +66,7 @@ export default {
                     password: this.password,
                 })
                 .then(() => {
+                    this.$toast("Welcome Back!");
                     this.$router.push({ name: "home" });
                 });
         },

@@ -63,6 +63,7 @@
 export default {
     data() {
         return {
+            name: "",
             email: "",
             password: "",
         };
@@ -77,7 +78,10 @@ export default {
                     password: this.password,
                 })
                 .then(() => {
-                    this.$router.push({ name: "home" });
+                    this.$toast(
+                        "Registered Successful! Please Login to use our services!"
+                    );
+                    this.$router.push({ name: "login" });
                 });
         },
     },

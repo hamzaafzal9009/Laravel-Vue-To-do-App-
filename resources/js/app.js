@@ -4,7 +4,11 @@ import Main from "./Main.vue";
 import router from "./router";
 import store from "./store";
 
+import Toast from "vue-toastification";
+import "vue-toastification/dist/index.css";
+
 window.Vue = require("vue").default;
+Vue.use(Toast);
 
 const app = new Vue({
     router,
