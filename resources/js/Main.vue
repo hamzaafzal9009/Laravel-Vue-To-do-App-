@@ -26,29 +26,24 @@
                             </router-link>
                         </li>
                         <li class="nav-item">
+                            <router-link
+                                v-if="!isLogged"
+                                class="nav-link"
+                                to="/register"
+                            >
+                                Register
+                            </router-link>
+                        </li>
+                        <li class="nav-item">
                             <span
                                 v-if="isLogged"
-                                class="nav-link"
+                                class="nav-link cursor-pointer"
                                 @click="logout()"
                             >
                                 Logout
                             </span>
                         </li>
                     </ul>
-                    <form class="d-flex">
-                        <!-- <input
-                                class="form-control me-2"
-                                type="search"
-                                placeholder="Search"
-                                aria-label="Search"
-                            />
-                            <button
-                                class="btn btn-outline-success"
-                                type="submit"
-                            >
-                                Search
-                            </button> -->
-                    </form>
                 </div>
             </nav>
         </div>
@@ -79,5 +74,8 @@ export default {
 .bg-light.main {
     min-height: 100vh;
     min-width: 100vw;
+}
+.cursor-pointer {
+    cursor: pointer;
 }
 </style>

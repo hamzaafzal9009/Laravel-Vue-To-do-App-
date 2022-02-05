@@ -2,6 +2,7 @@ import Vue from "vue";
 import VueRouter from "vue-router";
 
 import Login from "../Pages/Login.vue";
+import Register from "../Pages/Register.vue";
 import Home from "../Pages/Home.vue";
 
 Vue.use(VueRouter);
@@ -11,6 +12,11 @@ const routes = [
         path: "/login",
         name: "login",
         component: Login,
+    },
+    {
+        path: "/register",
+        name: "register",
+        component: Register,
     },
     {
         path: "/",
@@ -23,7 +29,7 @@ const routes = [
 ];
 const router = new VueRouter({
     mode: "history",
-    base: '/',
+    base: "/",
     routes,
 });
 router.beforeEach((to, from, next) => {
