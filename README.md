@@ -48,9 +48,15 @@ $ php artisan optimize
 ```
 $ php artisan migrate
 ```
+*  Update MIX_API_URL in env file
+
 * Start server (http://localhost:8000)
 ```
 $ php artisan serve
 ```
-
 * That's everything on the backend part.
+
+* For Front-End.
+```
+$ npm install && npm run watch
+```
